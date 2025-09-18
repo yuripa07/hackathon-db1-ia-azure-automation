@@ -1,4 +1,3 @@
-
 # Gerador de Tarefas Azure com IA
 
 Este projeto foi desenvolvido como parte de um hackathon com o objetivo de otimizar o processo de criação de itens de trabalho no Azure DevOps.
@@ -62,6 +61,30 @@ graph TD
     H --> A;
     A --> J{"Exibe Link para a<br>Tarefa Criada"};
 ```
+
+---
+
+## Vulnerabilidades de Segurança e Pontos de Melhoria
+
+Como um protótipo desenvolvido em um hackathon, a aplicação possui algumas simplificações arquiteturais que introduzem vulnerabilidades de segurança. É crucial que estes pontos sejam corrigidos antes de considerar o uso em um ambiente de produção.
+
+### 1. (Crítico) Armazenamento do Token de Acesso Pessoal (PAT) no `localStorage`
+
+-   **O Problema:** O token PAT do Azure DevOps, que funciona como uma senha, é armazenado no `localStorage` do navegador. Esta é uma área de armazenamento acessível por qualquer script JavaScript em execução na página.
+-   **O Risco:** Um ataque de Cross-Site Scripting (XSS) poderia facilmente injetar um script malicioso para ler o `localStorage`, roubar o token PAT e ganhar acesso total aos projetos do usuário no Azure DevOps.
+-   **Solução Recomendada:** Tokens e chaves de API sensíveis **nunca** devem ser manipulados ou armazenados no frontend. A arquitetura correta envolve a criação de um **backend (servidor) que atua como um proxy**. O frontend se comunica apenas com este backend, que por sua vez armazena o PAT de forma segura e realiza as chamadas para a API do Azure DevOps, garantindo que o token nunca seja exposto ao navegador.
+
+### 2. (Alto) Vulnerabilidade de Cross-Site Scripting (XSS) na Renderização da Descrição
+
+-   **O Problema:** A descrição da tarefa, que pode ser editada pelo usuário, era anteriormente renderizada usando `dangerouslySetInnerHTML`. Esta função insere HTML diretamente no DOM sem sanitização.
+-   **O Risco:** Um usuário poderia inserir código JavaScript malicioso (ex: `<script>alert('XSS')</script>`) no campo de descrição. Este script seria executado no navegador de qualquer pessoa que visualizasse o card, permitindo o roubo do PAT ou outras ações maliciosas.
+-   **Correção Aplicada:** O uso de `dangerouslySetInnerHTML` foi **removido**. A aplicação agora utiliza um componente React que interpreta o markdown de forma segura, convertendo parágrafos e listas em elementos React, o que previne a injeção de scripts.
+
+### 3. Exposição de Chaves de API no Cliente
+
+-   **O Problema:** Por ser uma aplicação puramente frontend, a chave da API do Google Gemini precisa estar disponível no lado do cliente para funcionar, o que a torna visível para qualquer pessoa que inspecione o código-fonte da página.
+-   **O Risco:** A exposição de chaves de API pode levar ao seu uso indevido e a custos inesperados na plataforma do Google Cloud.
+-   **Solução Recomendada:** Assim como no caso do PAT, a solução ideal é centralizar todas as chamadas a APIs externas em um **backend proxy**.
 
 ---
 

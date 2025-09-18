@@ -11,23 +11,26 @@ interface TaskCardProps {
   onUpdate: (updatedTask: AzureTask) => void;
 }
 
-const DescriptionRenderer: React.FC<{ content: string }> = ({ content }) => {
-    const createMarkup = (htmlContent: string) => {
-      // Basic markdown to HTML conversion for paragraphs and lists
-      const formattedHtml = htmlContent
-        .split('\n\n') // Split by double newlines for paragraphs
-        .map(paragraph => {
-          if (paragraph.trim().startsWith('* ') || paragraph.trim().startsWith('- ')) {
-            const listItems = paragraph.split('\n').map(item => `<li>${item.substring(2)}</li>`).join('');
-            return `<ul>${listItems}</ul>`;
-          }
-          return `<p>${paragraph}</p>`;
-        })
-        .join('');
-      return { __html: formattedHtml };
-    };
+const SafeMarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
+    const elements = content.split('\n\n').map((block, blockIndex) => {
+      const trimmedBlock = block.trim();
+      if (trimmedBlock.startsWith('* ') || trimmedBlock.startsWith('- ')) {
+        const listItems = block.split('\n').filter(line => line.trim().length > 0);
+        return (
+          <ul key={blockIndex} className="list-disc list-inside space-y-1">
+            {listItems.map((item, itemIndex) => (
+              <li key={`${blockIndex}-${itemIndex}`}>{item.substring(2)}</li>
+            ))}
+          </ul>
+        );
+      }
+      if (trimmedBlock) {
+          return <p key={blockIndex}>{block}</p>;
+      }
+      return null;
+    });
   
-    return <div dangerouslySetInnerHTML={createMarkup(content)} />;
+    return <>{elements}</>;
 };
 
 export const TaskCard: React.FC<TaskCardProps> = ({ task, azureConfig, isAzureConfigured, onUpdate }) => {
@@ -198,8 +201,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, azureConfig, isAzureCo
           
           <div>
             <h4 className="font-semibold text-gray-400">Descrição</h4>
-            <div className="prose prose-sm prose-invert mt-1 max-w-none text-gray-300 p-3 bg-gray-900/50 rounded-md space-y-2">
-                <DescriptionRenderer content={task.description} />
+            <div className="prose prose-sm prose-invert mt-1 max-w-none text-gray-300 p-3 bg-gray-900/50 rounded-md space-y-3">
+                <SafeMarkdownRenderer content={task.description} />
             </div>
           </div>
 
