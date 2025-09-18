@@ -1,6 +1,6 @@
 export interface AzureTask {
   title: string;
-  type: 'Task' | 'Bug' | 'User Story' | 'Feature';
+  type: string;
   description: string;
   tags: string[];
 }

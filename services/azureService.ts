@@ -10,7 +10,7 @@ export async function sendTaskToAzure(task: AzureTask, config: AzureConfig): Pro
   const { organization, project, pat } = config;
 
   if (!organization || !project || !pat) {
-    throw new Error("Azure DevOps configuration is incomplete.");
+    throw new Error("A configuração do Azure DevOps está incompleta.");
   }
 
   // Azure DevOps API uses the work item type with a '$' prefix in the URL
@@ -50,7 +50,7 @@ export async function sendTaskToAzure(task: AzureTask, config: AzureConfig): Pro
     const errorData = await response.json();
     console.error("Azure API Error:", errorData);
     // Provide a more user-friendly error message
-    const message = errorData.message || `Request failed with status ${response.status}. Check your PAT permissions and configuration.`;
+    const message = errorData.message || `A requisição falhou com o status ${response.status}. Verifique as permissões do seu PAT e a configuração.`;
     throw new Error(message);
   }
 

@@ -14,22 +14,22 @@ const responseSchema = {
     properties: {
       title: {
         type: Type.STRING,
-        description: "A concise, descriptive title for the work item.",
+        description: "Um título conciso e descritivo para o item de trabalho.",
       },
       type: {
         type: Type.STRING,
-        description: "The type of work item. Must be one of: 'Task', 'Bug', 'User Story', 'Feature'.",
+        description: "O tipo do item de trabalho, conforme especificado pelo usuário.",
       },
       description: {
         type: Type.STRING,
-        description: "A detailed description of the task, including acceptance criteria if applicable. Use markdown for formatting.",
+        description: "Uma descrição detalhada da tarefa, incluindo critérios de aceitação se aplicável. Use markdown para formatação.",
       },
       tags: {
         type: Type.ARRAY,
         items: {
           type: Type.STRING,
         },
-        description: "A list of relevant tags for categorization (e.g., 'API', 'UI', 'Backend', 'Q1-2024').",
+        description: "Uma lista de tags relevantes para categorização (ex: 'API', 'UI', 'Backend', 'Q1-2024').",
       },
     },
     required: ["title", "type", "description", "tags"],
@@ -39,15 +39,14 @@ const responseSchema = {
 export async function generateTasksFromTranscription(
   transcription: string,
   systemInstructions: string,
-  userPrompt: string
+  taskType: string
 ): Promise<AzureTask[]> {
   const finalPrompt = `
-    ${userPrompt ? `A specific instruction for this request is: "${userPrompt}". Please prioritize this.\n\n---\n\n` : ''}
-    Based on the following meeting transcription, identify all actionable tasks, user stories, bugs, or features. 
-    For each item, provide a clear title, a detailed description, a suitable work item type, and relevant tags.
-    Ensure the description contains enough detail for a developer or team member to start work.
+    Com base nos detalhes fornecidos, crie um ou mais itens de trabalho estruturados para o Azure DevOps.
+    O tipo do item de trabalho DEVE ser '${taskType}'.
+    Siga o formato e as convenções descritas no modelo/instruções do sistema.
 
-    Transcription:
+    Detalhes do Card:
     ---
     ${transcription}
     ---
@@ -73,11 +72,11 @@ export async function generateTasksFromTranscription(
         return tasks as AzureTask[];
     } else {
         console.error("Parsed JSON is not in the expected format:", tasks);
-        throw new Error("AI returned data in an unexpected format.");
+        throw new Error("A IA retornou dados em um formato inesperado.");
     }
 
   } catch (error) {
     console.error("Error calling Gemini API:", error);
-    throw new Error("Failed to generate tasks from transcription.");
+    throw new Error("Falha ao gerar tarefas a partir dos detalhes.");
   }
 }

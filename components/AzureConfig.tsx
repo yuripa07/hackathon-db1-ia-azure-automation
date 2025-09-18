@@ -18,10 +18,10 @@ export const AzureConfig: React.FC<AzureConfigProps> = ({ config, setConfig, isD
 
     return (
         <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 space-y-4">
-             <h2 className="text-xl font-semibold text-gray-200">Azure DevOps Configuration</h2>
+             <h2 className="text-xl font-semibold text-gray-200">Configuração do Azure DevOps</h2>
             <div>
                 <label htmlFor="organization" className="block text-sm font-medium text-gray-300 mb-2">
-                    Organization Name
+                    Nome da Organização
                 </label>
                 <input
                     type="text"
@@ -30,13 +30,13 @@ export const AzureConfig: React.FC<AzureConfigProps> = ({ config, setConfig, isD
                     value={config.organization}
                     onChange={handleChange}
                     disabled={isDisabled}
-                    placeholder="e.g., 'your-org-name'"
+                    placeholder="Ex: 'sua-org'"
                     className="w-full p-2 bg-gray-800 border-2 border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
             </div>
             <div>
                 <label htmlFor="project" className="block text-sm font-medium text-gray-300 mb-2">
-                    Project Name
+                    Nome do Projeto
                 </label>
                 <input
                     type="text"
@@ -45,7 +45,7 @@ export const AzureConfig: React.FC<AzureConfigProps> = ({ config, setConfig, isD
                     value={config.project}
                     onChange={handleChange}
                     disabled={isDisabled}
-                    placeholder="e.g., 'YourProject'"
+                    placeholder="Ex: 'MeuProjeto'"
                     className="w-full p-2 bg-gray-800 border-2 border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
             </div>
@@ -60,13 +60,13 @@ export const AzureConfig: React.FC<AzureConfigProps> = ({ config, setConfig, isD
                     value={config.pat}
                     onChange={handleChange}
                     disabled={isDisabled}
-                    placeholder="Enter your PAT with read/write permissions for work items"
+                    placeholder="Insira seu PAT com permissões de leitura/escrita para itens de trabalho"
                     className="w-full p-2 bg-gray-800 border-2 border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                     aria-describedby="pat-helper"
                 />
                  <p id="pat-helper" className="text-xs text-gray-500 mt-2">
-                    Your PAT is stored in your browser's local storage and is not sent anywhere except directly to Azure DevOps. 
-                    <a href="https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline ml-1">Learn how to create a PAT.</a>
+                    Seu PAT é armazenado no armazenamento local do seu navegador e não é enviado para nenhum outro lugar, exceto diretamente para o Azure DevOps. 
+                    <a href="https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline ml-1">Aprenda a criar um PAT.</a>
                 </p>
             </div>
         </div>

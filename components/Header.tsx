@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AzureIcon } from './icons/AzureIcon';
 
@@ -8,7 +7,7 @@ export const Header: React.FC = () => {
       <div className="container mx-auto px-4 py-4 flex items-center justify-center">
         <AzureIcon className="h-8 w-8 mr-3 text-blue-400" />
         <h1 className="text-2xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
-          AI Azure Task Generator
+          Gerador de Tarefas Azure com IA
         </h1>
       </div>
     </header>
