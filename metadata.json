@@ -1,0 +1,5 @@
+{
+  "name": "Azure Task Generator from Transcription",
+  "description": "An application that takes a meeting transcription and uses AI to generate actionable tasks formatted for Azure DevOps.",
+  "requestFramePermissions": []
+}
